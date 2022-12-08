@@ -34,6 +34,7 @@ fn part_one(input: &str) {
         let (first_compartment, second_compartment) = rucksack.split_at(rucksack.len() / 2);
 
         priority_sum += common_char(vec![first_compartment, second_compartment])
+            .unwrap()
             .get_priority();
     });
 
@@ -43,21 +44,19 @@ fn part_one(input: &str) {
 fn part_two(input: &str) {
     let mut priority_sum = 0;
     for group in &input.lines().into_iter().chunks(3) {
-        priority_sum += common_char(group.collect_vec()).get_priority();
+        priority_sum += common_char(group.collect_vec()).unwrap().get_priority();
     }
 
     println!("{}", priority_sum);
 }
 
-fn common_char(
-    words: Vec<&str>
-) -> char {
+fn common_char(words: Vec<&str>) -> Option<char> {
     for word in &words {
         for c in word.chars() {
             if words.iter().all(|w| w.contains(c)) {
-                return c
+                return Some(c);
             }
         }
     }
-    '\0'
+    None
 }
